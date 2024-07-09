@@ -21,7 +21,7 @@ class CryptographyHandler:
                 line = line.strip()
                 print(line)
                 try:
-                    key = base64.urlsafe_b64encode(self.kdf.derive(line.encode()))
+                    key = base64.urlsafe_b64encode(self.kdf.derive(line.encode())) # This is where the key is derived from the wordlist word
                     if self.try_decrypt(key, ciphertext):
                         print(f"Found the key! {line}")
                         print(self.decrypt(key, ciphertext))
