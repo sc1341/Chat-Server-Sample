@@ -15,20 +15,16 @@ class CryptographyHandler:
             iterations=480000
         )
 
-    def break_fernet(self, wordlist):
-        ciphertext_1 = 'gAAAAABmiDdMzuHbsweg-BbjvimbnotFEixMe5PMwdFHuMEoYjpHzKhHzpdeZPmj5SlMjs8WF7iCtRhAkVM7oumKeW8otGwh3g=='
-        ciphertext_2 = 'gAAAAABmiDdPBRBz94J-OLOVID_YL3o8e5oV288mrowP7aoE10PDlLrrWR8pYzbhk681NEC98_P_iWCm0JMDawKOgFOfxZwI9g=='
-
+    def break_fernet(self, ciphertext : str, wordlist : str):
         with open(wordlist, 'r', encoding='latin-1', errors='replace') as file:
             for line in file:
                 line = line.strip()
                 print(line)
                 try:
                     key = base64.urlsafe_b64encode(self.kdf.derive(line.encode()))
-                    if self.try_decrypt(key, ciphertext_1) and self.try_decrypt(key, ciphertext_2):
+                    if self.try_decrypt(key, ciphertext):
                         print(f"Found the key! {line}")
-                        print(self.decrypt(key, ciphertext_1))
-                        print(self.decrypt(key, ciphertext_2))
+                        print(self.decrypt(key, ciphertext))
                         break
                 except Exception as e:
                     continue
@@ -48,7 +44,8 @@ class CryptographyHandler:
 
 def main():
     c = CryptographyHandler()
-    c.break_fernet('mini.txt')
+    ciphertext_1 = 'gAAAAABmiDdMzuHbsweg-BbjvimbnotFEixMe5PMwdFHuMEoYjpHzKhHzpdeZPmj5SlMjs8WF7iCtRhAkVM7oumKeW8otGwh3g=='
+    c.break_fernet(ciphertext_1, 'mini.txt')
 
 if __name__ == "__main__":
     main()
